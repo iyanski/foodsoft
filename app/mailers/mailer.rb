@@ -54,6 +54,25 @@ class Mailer < ActionMailer::Base
          :subject => "[#{FoodsoftConfig[:name]}] " + I18n.t('mailer.order_result.subject', :name => group_order.order.name)
   end
 
+  # Sends order result to the supplier
+  def order_result_supplier(user, order, options = {})
+    set_foodcoop_scope
+    @user     = user
+    @order    = order
+    @supplier = order.supplier
+
+    add_order_result_attachments order, options
+
+    subject = "[#{FoodsoftConfig[:name]}] " + I18n.t('mailer.order_result_supplier.subject', :name => order.supplier.name)
+    subject += " (#{I18n.t('activerecord.attributes.order.pickup')}: #{format_date(order.pickup)})" if order.pickup
+    user_email = "#{show_user user} <#{user.email}>"
+
+    mail :to => order.supplier.email,
+         :cc => user_email,
+         :reply_to => user_email,
+         :subject => subject
+  end
+
   # Notify user if account balance is less than zero
   def negative_balance(user,transaction)
     set_foodcoop_scope
@@ -94,5 +113,11 @@ class Mailer < ActionMailer::Base
     end
     ActionMailer::Base.default_url_options[:foodcoop] = foodcoop
   end
-  
+
+  # separate method to allow plugins to mess with the attachments
+  def add_order_result_attachments(order, options = {})
+    attachments['order.pdf'] = OrderFax.new(order, options).to_pdf
+    attachments['order.csv'] = OrderCsv.new(order, options).to_csv
+  end
+
 end
