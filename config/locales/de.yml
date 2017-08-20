@@ -1373,6 +1373,7 @@ de:
     finish:
       notice: Die Bestellung wurde beendet.
     form:
+      hint_auto_finish: Diese Bestllung am Endzeitpunkt automatisch beenden
       ignore_warnings: Warnungen ignorieren
       prices: Price (netto/FC)
       select_all: Alle auswählen

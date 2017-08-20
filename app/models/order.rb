@@ -263,6 +263,17 @@ class Order < ActiveRecord::Base
     update_attributes! state: 'closed', updated_by: user
   end
 
+  def self.finish_ended
+    orders = Order.where(auto_finish: true, state: 'open').where('ends <= ?', DateTime.now)
+    orders.each do |order|
+      begin
+        order.finish! order.created_by
+      rescue => error
+        Rails.logger.error "Can't finish order \##{order.id}"
+      end
+    end
+  end
+
   protected
 
   def starts_before_ends

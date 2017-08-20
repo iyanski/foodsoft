@@ -5,6 +5,7 @@
     = f.input :boxfill, as: :date_picker_time if @order.is_boxfill_useful?
     = f.input :ends, as: :date_picker_time
     = f.input :pickup, as: :date_picker, input_html: {class: 'input-small'}
+  = f.input :auto_finish, label: false, inline_label: t('.hint_auto_finish')
   = f.input :note, input_html: {rows: 2, class: 'input-xxlarge'}
 
   %h2= t '.title'

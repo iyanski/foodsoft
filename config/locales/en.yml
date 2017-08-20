@@ -1382,6 +1382,7 @@ en:
     finish:
       notice: The order has been closed.
     form:
+      hint_auto_finish: Close this order automatically when end has been reached
       ignore_warnings: Ignore warnings
       prices: Prices (net/FC)
       select_all: Select all
